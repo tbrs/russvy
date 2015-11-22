@@ -113,10 +113,10 @@ public class RussvyAssetReader {
             }
             while(true) {
                 try {
-                    mManager.addRange(String.valueOf(os.readInt()),
+                    mManager.addRange(String.valueOf(os.readShort()),
                             String.valueOf(os.readInt()),
                             String.valueOf(os.readInt()),
-                            os.readInt(), os.readInt());
+                            os.readShort(), os.readShort());
                 } catch (IOException e) {
                     break;
                 }
