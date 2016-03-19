@@ -1,0 +1,52 @@
+apply plugin: "java"
+
+buildDir = "out-gradle"
+
+sourceSets {
+    main {
+        java {
+            setSrcDirs(["src"])
+        }
+        resources {
+            setSrcDirs(["res"])
+        }
+    }
+}
+
+jar {
+    archiveName = "asset_generator.jar"
+    manifest {
+        attributes 'Main-Class': 'com.maphon.russvy.assets.CsvConverter'
+    }
+}
+
+String tmpAssetDir = "$buildDir/assets"
+String tmpResourceDir = "$buildDir/res"
+
+task generate(type: Exec) {
+    dependsOn "assemble"
+    inputs.file jar.archivePath
+    inputs.files fileTree(dir: inputDir, include: "*.csv")
+    outputs.dir tmpAssetDir
+    outputs.dir tmpResourceDir
+    executable "java"
+    args "-jar", jar.archivePath, inputDir, tmpAssetDir, tmpResourceDir
+        mkdir tmpAssetDir
+        mkdir tmpResourceDir
+}
+
+task updateAssets(type: Copy) {
+    dependsOn "generate"
+    from tmpAssetDir
+    into outputAssetDir
+}
+
+task updateResources(type: Copy) {
+    dependsOn "generate"
+    from tmpResourceDir
+    into outputResourceDir
+}
+
+task update(dependsOn: ["updateResources", "updateAssets"]) {
+    group "russvy"
+}

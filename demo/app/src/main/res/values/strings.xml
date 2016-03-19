@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Russvy Demo</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="message_extract_complete">Data extracted.</string>
+    <string name="message_search_empty">Sorry, no results matching your search. Better luck next time!</string>
+    <string name="message_search_not_a_region">%s is not a valid region/operator code.</string>
+
+    <string name="label_ranges">Ranges: %d</string>
+    <string name="label_operators">Operators: %d</string>
+    <string name="label_regions">Regions: %d</string>
+
+    <string name="button_phone">Phone</string>
+    <string name="button_region">Region</string>
+    <string name="button_operator">Operator</string>
+    <string name="button_update">Update</string>
+</resources>

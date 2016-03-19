@@ -1,0 +1,8 @@
+include ':converter'
+project(':converter').projectDir = new File(settingsDir, '../data/converter')
+include ':demo'
+project(':demo').projectDir = new File(settingsDir, '../demo')
+include ':demo:app'
+project(':demo:app').projectDir = new File(settingsDir, '../demo/app')
+include ':russvy'
+project(':russvy').projectDir = new File(settingsDir, '../library')
