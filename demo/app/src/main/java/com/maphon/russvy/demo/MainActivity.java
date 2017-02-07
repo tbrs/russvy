@@ -53,25 +53,47 @@ public class MainActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
             return;
         }
-        final Cursor cursor = mRussvyManager.getRanges(code);
-        if (cursor == null) {
-            return;
-        }
-        if (cursor.getCount() <= 0) {
-            Toast.makeText(MainActivity.this, getString(R.string.message_search_empty),
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-        final List<String> items = new LinkedList<>();
-        while (cursor.moveToNext()) {
-            items.add(formatRange(cursor));
-        }
-        ((ListView)findViewById(R.id.search_results))
-                .setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items));
+
+        new AsyncTask<Void, Void, List<String>>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                MainActivity.this.findViewById(R.id.search_progress).setVisibility(View.VISIBLE);
+                MainActivity.this.findViewById(R.id.search_results).setVisibility(View.GONE);
+                MainActivity.this.findViewById(R.id.button_region).setEnabled(false);
+            }
+
+            @Override
+            protected void onPostExecute(List<String> items) {
+                super.onPostExecute(items);
+                if (items.isEmpty()) {
+                    Toast.makeText(MainActivity.this, getString(R.string.message_search_empty),
+                            Toast.LENGTH_SHORT).show();
+                }
+                ((ListView) findViewById(R.id.search_results)).setAdapter(
+                        new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1,
+                                items));
+                MainActivity.this.findViewById(R.id.search_progress).setVisibility(View.GONE);
+                MainActivity.this.findViewById(R.id.search_results).setVisibility(View.VISIBLE);
+                MainActivity.this.findViewById(R.id.button_region).setEnabled(true);
+            }
+
+            @Override
+            protected List<String> doInBackground(Void... voids) {
+                final Cursor cursor = mRussvyManager.getRanges(code);
+                if (cursor == null || cursor.getCount() == 0) return null;
+                List<String> items = new LinkedList<>();
+                while (cursor.moveToNext()) {
+                    items.add(formatRange(cursor));
+                }
+                return items;
+            }
+        }.execute();
     }
 
     /** Extracts data from Russvy and stores it into the DB. */
     public void onExtractData(View v) {
+        v.setEnabled(false);
         final RussvyAssetReader reader = new RussvyAssetReader(null, mRussvyManager,
                 new RussvyAssetReader.Listener() {
                     @Override
