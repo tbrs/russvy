@@ -1,5 +1,6 @@
 package com.maphon.russvy;
 
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -33,6 +34,11 @@ final class RussvyUtils {
                 // intentionally blank
             }
         }
+    }
+
+    // Cursor does not implement Closeable in API < 16.
+    public static void closeCursor(@Nullable Cursor c) {
+        if (c != null) c.close();
     }
 
     private RussvyUtils() {

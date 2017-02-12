@@ -85,7 +85,7 @@ final class RussvyDatabaseHelper {
         if (cursor != null && cursor.moveToFirst()) {
             name = cursor.getString(0);
         }
-        RussvyUtils.closeStream(cursor);
+        RussvyUtils.closeCursor(cursor);
 
         return name;
     }
