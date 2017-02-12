@@ -12,6 +12,9 @@ import java.util.Date;
 import java.util.Locale;
 
 final class RussvyUtils {
+    private RussvyUtils() {
+    }
+
     @Nullable
     public static Date parseDate(@NonNull String format, @Nullable String date) {
         if (date == null) {
@@ -39,8 +42,5 @@ final class RussvyUtils {
     // Cursor does not implement Closeable in API < 16.
     public static void closeCursor(@Nullable Cursor c) {
         if (c != null) c.close();
-    }
-
-    private RussvyUtils() {
     }
 }
